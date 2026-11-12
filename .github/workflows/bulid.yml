@@ -14,13 +14,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check CPP files
+        shell: pwsh
+        run: |
+          Write-Host "Daftar file dalam repository:"
+          Get-ChildItem -Path . -Recurse
+
       - name: Compile C++
         shell: pwsh
         run: |
-          g++ soto.cpp -o soto.exe -std=c++17 -O2
+          $files = @(Get-ChildItem -Path . -Filter *.cpp -Recurse -File)
+
+          if ($files.Count -eq 0) {
+            throw "File CPP tidak ditemukan!"
+          }
+
+          $source = $files[0].FullName
+
+          Write-Host "Menggunakan file: $source"
+
+          g++ "$source" -o program.exe -std=c++17 -O2
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-exe
-          path: soto.exe
+          name: hasil-exe
+          path: program.exe
