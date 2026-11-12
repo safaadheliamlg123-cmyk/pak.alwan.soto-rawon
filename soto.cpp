@@ -17,6 +17,7 @@ int main() {
         cout<<total[i]<<endl;
         cout<<"______________________"<<endl;
     }
+    system("pause");
     
     return 0;
   }
